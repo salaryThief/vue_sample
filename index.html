@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    #app {
+      width: 100%;
+      text-align: center;
+    }
+
+    input {
+      height: 24px;
+    }
+
+    #qrcode {
+      margin-top: 20px;
+    }
+
+    li:active {
+      background-color: gray;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <form @submit="handleSubmit">
+      URL:
+      <input v-model="url" required>
+      <button type="submit">作成</button>
+      <button type="reset">リセット</button>
+    </form>
+    <div id="qrcode"></div>
+    <ul>
+      <li v-for="txt in created" @click="reEnterURL">
+        {{txt}}
+      </li>
+    </ul>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          url: '',
+          created: [],
+        };
+      },
+      methods: {
+        handleSubmit(ev) {
+          ev.preventDefault();
+          this.createQRCode(this.url);
+        },
+        reEnterURL(ev) {
+          this.url = ev.target.innerText;
+          this.createQRCode(this.url);
+        },
+        createQRCode(url) {
+          if (!this.created.includes(url)) {
+            this.created.push(url)
+          };
+          $('#qrcode').html(null)
+            .qrcode({
+              text: url,
+            });
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>
